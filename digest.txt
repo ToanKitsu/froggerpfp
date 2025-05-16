@@ -1,0 +1,643 @@
+Directory structure:
+└── WebFpf/
+    ├── index.html
+    ├── assets/
+    │   └── favicon/
+    ├── css/
+    │   └── style.css
+    └── js/
+        ├── main.js
+        └── ui.js
+
+================================================
+File: index.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FroggerPFP - Create Your Avatar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png" />
+    <!-- Khối <style> đã được xóa khỏi đây -->
+  </head>
+  <body
+    class="bg-gray-800 text-white flex flex-col items-center min-h-screen p-4"
+  >
+    <header class="w-full max-w-4xl mb-8">
+      <div class="flex justify-between items-center py-4">
+        <h1 class="text-4xl font-bold text-green-400">FroggerPFP</h1>
+        <div class="flex space-x-4">
+          <a
+            href="https://t.me/FroggerethCTO"
+            target="_blank"
+            class="hover:opacity-75"
+          >
+            <img
+              src="/assets/telegram-icon.svg"
+              alt="Telegram"
+              class="w-8 h-8"
+            />
+          </a>
+          <a
+            href="https://x.com/froggeroneth"
+            target="_blank"
+            class="hover:opacity-75"
+          >
+            <img src="/assets/twitter-icon.svg" alt="Twitter" class="w-8 h-8" />
+          </a>
+          <button
+            id="buy-frogger-button"
+            class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 rounded"
+          >
+            BUY FROGGER
+          </button>
+        </div>
+      </div>
+      <div class="bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+        <span class="text-sm md:text-base"
+          >FROGGER ( ETH ):
+          <span id="contract-address"
+            >0xe778FD9a8d074e4a808092896B33FE3D3452c125</span
+          ></span
+        >
+        <button
+          id="copy-contract-button"
+          title="Copy Contract Address"
+          class="ml-2 p-2 bg-gray-600 hover:bg-gray-500 rounded"
+        >
+          <img src="/assets/copy-icon.svg" alt="Copy" class="w-5 h-5" />
+        </button>
+      </div>
+    </header>
+
+    <main class="w-full max-w-4xl flex flex-col lg:flex-row gap-8">
+      <div class="flex-1 flex flex-col items-center">
+        <h2 class="text-2xl font-semibold mb-4 text-green-300">
+          Create Your Frogger Avatar
+        </h2>
+        <p class="text-gray-400 mb-6 text-center">
+          Upload your photo, adjust size and position to create your
+          personalized avatar.
+        </p>
+
+        <div class="pfp-container bg-gray-700">
+          <div id="uploaded-image-container">
+            <img
+              id="uploaded-image"
+              src="#"
+              alt="Uploaded image"
+              class="hidden"
+            />
+          </div>
+          <img
+            id="frogger-template"
+            src="assets/frogger_template.png"
+            alt="Frogger Template"
+          />
+          <div id="uploaded-image-border" class="hidden">
+            <span class="corner-dot top-left"></span>
+            <span class="corner-dot top-right"></span>
+            <span class="corner-dot bottom-left"></span>
+            <span class="corner-dot bottom-right"></span>
+          </div>
+        </div>
+        <div class="mt-6 w-full max-w-xs">
+          <label
+            for="image-upload"
+            class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg cursor-pointer flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+              />
+            </svg>
+            Select Photo
+          </label>
+          <input
+            type="file"
+            id="image-upload"
+            class="hidden"
+            accept="image/*"
+          />
+        </div>
+      </div>
+
+      <aside class="w-full lg:w-1/3 bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-4 text-green-300">Photo Editor</h3>
+
+        <div class="mb-4">
+          <label
+            for="scale-slider"
+            class="block mb-2 text-sm font-medium text-gray-300"
+            >Scale:</label
+          >
+          <input
+            id="scale-slider"
+            type="range"
+            min="0.1"
+            max="3"
+            value="1"
+            step="0.01"
+            class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <label for="rotate-slider" class="text-sm font-medium text-gray-300"
+              >Rotate:</label
+            >
+            <span id="rotation-display" class="text-sm text-gray-400">0°</span>
+          </div>
+          <input
+            id="rotate-slider"
+            type="range"
+            min="-720"
+            max="720"
+            value="0"
+            step="1"
+            class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+
+        <button
+          id="download-button"
+          class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-3 px-4 rounded-lg flex items-center justify-center disabled:opacity-50"
+          disabled
+        >
+          <img
+            class="w-6 h-6"
+            id="download-icon"
+            src="/assets/download.svg"
+            alt="Frogger Download"
+          />
+          <span class="ml-4"> Download Avatar </span>
+        </button>
+
+        <div class="mt-8 border-t border-gray-600 pt-6">
+          <h4
+            class="text-lg font-semibold mb-3 text-green-300 flex items-center cursor-pointer"
+            id="tips-toggle"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2 transition-transform transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+            Tips & Tricks
+          </h4>
+          <div id="tips-content" class="text-sm text-gray-400 hidden space-y-2">
+            <p>- Use high-resolution images for the best results.</p>
+            <p>- Adjust the scale and rotation until you are satisfied.</p>
+            <p>
+              - Your image is processed locally in your browser - nothing is
+              uploaded to our servers.
+            </p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer
+      class="w-full max-w-4xl mt-12 text-center text-gray-500 text-sm py-4 border-t border-gray-700"
+    >
+      <p>© <span id="current-year"></span> FroggerPFP. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
+
+
+
+
+================================================
+File: css/style.css
+================================================
+/* css/style.css */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #d1cb1b;
+}
+
+.pfp-container {
+  position: relative;
+  width: 400px; /* Điều chỉnh kích thước nếu cần */
+  height: 400px; /* Điều chỉnh kích thước nếu cần */
+  overflow: hidden; /* Ẩn phần ảnh upload thừa ra ngoài */
+  /* border: 4px solid #facc15; Tailwind yellow-400 */
+  border-radius: 0.5rem; /* Tailwind rounded-lg */
+  /* box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Bóng mờ màu xanh lá, bạn có thể bỏ comment nếu muốn */
+}
+
+#frogger-template {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Đảm bảo template luôn ở trên */
+  pointer-events: none; /* Cho phép click xuyên qua template để tương tác với ảnh upload */
+}
+
+#uploaded-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#uploaded-image {
+  max-width: none; /* Cho phép phóng to vượt kích thước container */
+  max-height: none; /* Cho phép phóng to vượt kích thước container */
+  cursor: grab;
+  transform-origin: center center; /* Đảm bảo scale và rotate từ trung tâm */
+}
+
+#uploaded-image-border {
+  position: absolute;
+  /* margin-top: -4px;
+  margin-left: -4px; */
+  border: 26px dashed #fde047; /* Độ dày viền */
+  pointer-events: none;
+  z-index: 15; /* Cao hơn frogger-template */
+  box-sizing: border-box; /* QUAN TRỌNG: Để border nằm trong width/height đã định */
+  transform-origin: center center; /* Đảm bảo scale và rotate từ trung tâm */
+}
+
+
+
+================================================
+File: js/main.js
+================================================
+// js/main.js
+document.addEventListener("DOMContentLoaded", () => {
+  const imageUpload = document.getElementById("image-upload");
+  const uploadedImage = document.getElementById("uploaded-image");
+  const uploadedImageContainer = document.getElementById(
+    "uploaded-image-container"
+  );
+  const uploadedImageBorder = document.getElementById("uploaded-image-border");
+  const froggerTemplate = document.getElementById("frogger-template");
+  const pfpContainer = document.querySelector(".pfp-container");
+  const scaleSlider = document.getElementById("scale-slider");
+  const rotateSlider = document.getElementById("rotate-slider");
+  const rotationDisplay = document.getElementById("rotation-display");
+  const downloadButton = document.getElementById("download-button");
+
+  let currentScale = 1;
+  let currentRotation = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let isDragging = false;
+  let startX, startY;
+  let originalImageWidth, originalImageHeight;
+  let maxScale = 1; // Giới hạn scale tối đa
+
+  // Độ dày border từ CSS
+  const borderWidthPx = 10; // Thay đổi từ 32px sang 10px theo CSS
+
+  if (
+    !imageUpload ||
+    !uploadedImage ||
+    !uploadedImageBorder ||
+    !scaleSlider ||
+    !rotateSlider ||
+    !rotationDisplay ||
+    !downloadButton ||
+    !pfpContainer ||
+    !froggerTemplate ||
+    !uploadedImageContainer
+  ) {
+    console.error(
+      "One or more DOM elements were not found. Please check your IDs."
+    );
+    return;
+  }
+
+  imageUpload.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        uploadedImage.src = e.target.result;
+        uploadedImage.classList.remove("hidden");
+        downloadButton.disabled = false;
+
+        uploadedImage.onload = () => {
+          originalImageWidth = uploadedImage.naturalWidth;
+          originalImageHeight = uploadedImage.naturalHeight;
+
+          // Lấy kích thước của container
+          const containerWidth = pfpContainer.offsetWidth;
+          const containerHeight = pfpContainer.offsetHeight;
+
+          // Tính toán tỷ lệ scale tối đa để ảnh không vượt quá kích thước của template
+          const scaleX = containerWidth / originalImageWidth;
+          const scaleY = containerHeight / originalImageHeight;
+          maxScale = Math.min(scaleX, scaleY);
+
+          // Giới hạn scale slider
+          scaleSlider.max = maxScale * 1.5; // Cho phép scale lớn hơn một chút so với max để người dùng có thể điều chỉnh
+
+          // Đặt scale ban đầu để ảnh vừa với container
+          currentScale = Math.min(1, maxScale * 0.8); // 80% của maxScale để có margin
+          scaleSlider.value = currentScale;
+
+          // Đặt kích thước rõ ràng cho ảnh
+          uploadedImage.style.width = originalImageWidth + "px";
+          uploadedImage.style.height = originalImageHeight + "px";
+
+          // Kích thước của uploadedImageBorder
+          const borderElementWidth = originalImageWidth + 2 * borderWidthPx;
+          const borderElementHeight = originalImageHeight + 2 * borderWidthPx;
+
+          uploadedImageBorder.style.width = borderElementWidth + "px";
+          uploadedImageBorder.style.height = borderElementHeight + "px";
+
+          // Căn giữa cả ảnh và viền trong container
+          uploadedImageBorder.style.left = `${
+            (containerWidth - borderElementWidth) / 2
+          }px`;
+          uploadedImageBorder.style.top = `${
+            (containerHeight - borderElementHeight) / 2
+          }px`;
+
+          // Hiển thị viền
+          uploadedImageBorder.classList.remove("hidden");
+
+          resetTransformations();
+        };
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert("Please select a valid image file.");
+      uploadedImage.src = "#";
+      uploadedImage.classList.add("hidden");
+      uploadedImageBorder.classList.add("hidden");
+      downloadButton.disabled = true;
+      resetTransformations();
+    }
+  });
+
+  function updateRotationDisplay() {
+    const displayAngle = ((currentRotation % 360) + 360) % 360;
+    let displayText = `${displayAngle}°`;
+    const turns = Math.floor(currentRotation / 360);
+    if (turns !== 0) {
+      displayText = `${displayAngle}° (${turns > 0 ? "+" : ""}${turns} turn${
+        Math.abs(turns) > 1 ? "s" : ""
+      })`;
+    }
+    rotationDisplay.textContent = displayText;
+  }
+
+  function resetTransformations() {
+    currentScale = Math.min(1, maxScale * 0.8); // Đảm bảo scale ban đầu không vượt quá giới hạn
+    currentRotation = 0;
+    currentX = 0;
+    currentY = 0;
+    scaleSlider.value = currentScale;
+    rotateSlider.value = 0;
+    updateRotationDisplay();
+    applyTransformations();
+  }
+
+  scaleSlider.addEventListener("input", () => {
+    currentScale = parseFloat(scaleSlider.value);
+    // Giới hạn scale không vượt quá maxScale
+    if (currentScale > maxScale * 1.5) {
+      currentScale = maxScale * 1.5;
+      scaleSlider.value = currentScale;
+    }
+    applyTransformations();
+  });
+
+  rotateSlider.addEventListener("input", () => {
+    currentRotation = parseInt(rotateSlider.value);
+    updateRotationDisplay();
+    applyTransformations();
+  });
+
+  function applyTransformations() {
+    const transformOrigin = "center center";
+    const transformValue = `translate(${currentX}px, ${currentY}px) scale(${currentScale}) rotate(${currentRotation}deg)`;
+
+    if (uploadedImage.src && uploadedImage.src !== "#") {
+      uploadedImage.style.transformOrigin = transformOrigin;
+      uploadedImage.style.transform = transformValue;
+
+      uploadedImageBorder.style.transformOrigin = transformOrigin;
+      uploadedImageBorder.style.transform = transformValue;
+      uploadedImageBorder.classList.remove("hidden");
+    } else {
+      // Reset transform cho cả ảnh và border nếu không có ảnh hợp lệ
+      uploadedImage.style.transform = "none";
+      uploadedImageBorder.style.transform = "none";
+      uploadedImageBorder.classList.add("hidden");
+    }
+  }
+
+  uploadedImage.addEventListener("mousedown", (e) => {
+    if (!uploadedImage.src || uploadedImage.src === "#") return;
+    e.preventDefault();
+    isDragging = true;
+    startX = e.clientX - currentX;
+    startY = e.clientY - currentY;
+    uploadedImage.style.cursor = "grabbing";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      currentX = e.clientX - startX;
+      currentY = e.clientY - startY;
+      applyTransformations();
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (isDragging) {
+      isDragging = false;
+      uploadedImage.style.cursor = "grab";
+    }
+  });
+
+  // Xử lý trường hợp chuột kéo ra ngoài cửa sổ trình duyệt
+  document.addEventListener("mouseleave", () => {
+    if (isDragging) {
+      isDragging = false;
+      uploadedImage.style.cursor = "grab";
+    }
+  });
+
+  downloadButton.addEventListener("click", () => {
+    if (
+      !uploadedImage.src ||
+      uploadedImage.src === "#" ||
+      !originalImageWidth ||
+      !originalImageHeight
+    ) {
+      alert("Please upload an image first.");
+      return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const containerWidth = pfpContainer.offsetWidth;
+    const containerHeight = pfpContainer.offsetHeight;
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+
+    // Tâm của pfpContainer, cũng là tâm xoay/scale cho ảnh
+    const pfpCenterX = canvas.width / 2;
+    const pfpCenterY = canvas.height / 2;
+
+    ctx.save();
+    // 1. Di chuyển context đến tâm đã bao gồm cả currentX, currentY (phần dịch chuyển do kéo)
+    ctx.translate(pfpCenterX + currentX, pfpCenterY + currentY);
+    // 2. Xoay quanh điểm này
+    ctx.rotate((currentRotation * Math.PI) / 180);
+    // 3. Scale quanh điểm này
+    ctx.scale(currentScale, currentScale);
+    // 4. Vẽ ảnh. Tâm của ảnh (originalImageWidth/2, originalImageHeight/2)
+    //    phải được đặt tại (0,0) của context đã transform.
+    //    Do đó, drawImage tại (-originalImageWidth/2, -originalImageHeight/2).
+    ctx.drawImage(
+      uploadedImage,
+      -originalImageWidth / 2,
+      -originalImageHeight / 2,
+      originalImageWidth,
+      originalImageHeight
+    );
+    ctx.restore();
+
+    // Vẽ template frogger lên trên cùng
+    if (froggerTemplate.complete && froggerTemplate.naturalWidth !== 0) {
+      ctx.drawImage(froggerTemplate, 0, 0, canvas.width, canvas.height);
+      triggerDownload(canvas);
+    } else {
+      // Xử lý trường hợp template chưa load (ví dụ, nếu src được set động)
+      const tempFroggerImage = new Image();
+      tempFroggerImage.crossOrigin = "anonymous"; // Nếu template từ domain khác
+      tempFroggerImage.onload = () => {
+        ctx.drawImage(tempFroggerImage, 0, 0, canvas.width, canvas.height);
+        triggerDownload(canvas);
+      };
+      tempFroggerImage.onerror = () => {
+        console.error(
+          "Frogger template image could not be loaded for canvas drawing."
+        );
+        alert("Error drawing template. Download may be incomplete.");
+        // Vẫn thử download phần ảnh đã vẽ được
+        triggerDownload(canvas);
+      };
+      tempFroggerImage.src = froggerTemplate.src;
+      // Không gọi triggerDownload ở đây nữa vì nó sẽ được gọi trong onload/onerror
+    }
+  });
+
+  function triggerDownload(canvas) {
+    const dataURL = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = dataURL;
+    link.download = "frogger_pfp.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  updateRotationDisplay(); // Khởi tạo hiển thị xoay ban đầu
+});
+
+
+
+================================================
+File: js/ui.js
+================================================
+document.addEventListener("DOMContentLoaded", () => {
+  // Sao chép địa chỉ Contract
+  const copyContractButton = document.getElementById("copy-contract-button");
+  const contractAddressElement = document.getElementById("contract-address");
+
+  if (copyContractButton && contractAddressElement) {
+    copyContractButton.addEventListener("click", () => {
+      const contractAddress = contractAddressElement.innerText;
+      navigator.clipboard
+        .writeText(contractAddress)
+        .then(() => {
+          // Thay đổi icon hoặc text của nút để báo thành công (tùy chọn)
+          const originalIcon = copyContractButton.innerHTML;
+          copyContractButton.innerHTML = `
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                          </svg>
+                      `;
+          setTimeout(() => {
+            copyContractButton.innerHTML = originalIcon;
+          }, 2000);
+        })
+        .catch((err) => {
+          console.error("Không thể sao chép địa chỉ contract: ", err);
+          alert("Không thể sao chép. Vui lòng thử lại hoặc sao chép thủ công.");
+        });
+    });
+  }
+
+  // Hiển thị/Ẩn Mẹo & Thủ thuật
+  const tipsToggle = document.getElementById("tips-toggle");
+  const tipsContent = document.getElementById("tips-content");
+  const tipsIcon = tipsToggle ? tipsToggle.querySelector("svg") : null;
+
+  if (tipsToggle && tipsContent && tipsIcon) {
+    tipsToggle.addEventListener("click", () => {
+      tipsContent.classList.toggle("hidden");
+      tipsIcon.classList.toggle("rotate-180"); // Xoay icon mũi tên
+    });
+  }
+
+  // Cập nhật năm hiện tại ở footer
+  const currentYearElement = document.getElementById("current-year");
+  if (currentYearElement) {
+    currentYearElement.textContent = new Date().getFullYear();
+  }
+
+  // Liên kết nút "MUA FROGGER" (thay YOUR_BUY_LINK_HERE bằng liên kết thực tế)
+  const buyFroggerButton = document.getElementById("buy-frogger-button");
+  if (buyFroggerButton) {
+    buyFroggerButton.addEventListener("click", () => {
+      window.open("https://app.uniswap.org/", "_blank");
+    });
+  }
+});
+
+

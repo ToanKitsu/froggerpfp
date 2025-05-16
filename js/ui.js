@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Sao chép địa chỉ Contract
   const copyContractButton = document.getElementById("copy-contract-button");
   const contractAddressElement = document.getElementById("contract-address");
 
@@ -9,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
       navigator.clipboard
         .writeText(contractAddress)
         .then(() => {
-          // Thay đổi icon hoặc text của nút để báo thành công (tùy chọn)
           const originalIcon = copyContractButton.innerHTML;
           copyContractButton.innerHTML = `
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -27,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Hiển thị/Ẩn Mẹo & Thủ thuật
   const tipsToggle = document.getElementById("tips-toggle");
   const tipsContent = document.getElementById("tips-content");
   const tipsIcon = tipsToggle ? tipsToggle.querySelector("svg") : null;
@@ -35,17 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (tipsToggle && tipsContent && tipsIcon) {
     tipsToggle.addEventListener("click", () => {
       tipsContent.classList.toggle("hidden");
-      tipsIcon.classList.toggle("rotate-180"); // Xoay icon mũi tên
+      tipsIcon.classList.toggle("rotate-180");
     });
   }
 
-  // Cập nhật năm hiện tại ở footer
   const currentYearElement = document.getElementById("current-year");
   if (currentYearElement) {
     currentYearElement.textContent = new Date().getFullYear();
   }
 
-  // Liên kết nút "MUA FROGGER" (thay YOUR_BUY_LINK_HERE bằng liên kết thực tế)
   const buyFroggerButton = document.getElementById("buy-frogger-button");
   if (buyFroggerButton) {
     buyFroggerButton.addEventListener("click", () => {
