@@ -1,0 +1,54 @@
+/* css/style.css */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #d1cb1b;
+}
+
+.pfp-container {
+  position: relative;
+  width: 400px; /* Điều chỉnh kích thước nếu cần */
+  height: 400px; /* Điều chỉnh kích thước nếu cần */
+  overflow: hidden; /* Ẩn phần ảnh upload thừa ra ngoài */
+  /* border: 4px solid #facc15; Tailwind yellow-400 */
+  border-radius: 0.5rem; /* Tailwind rounded-lg */
+  /* box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); /* Bóng mờ màu xanh lá, bạn có thể bỏ comment nếu muốn */
+}
+
+#frogger-template {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Đảm bảo template luôn ở trên */
+  pointer-events: none; /* Cho phép click xuyên qua template để tương tác với ảnh upload */
+}
+
+#uploaded-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#uploaded-image {
+  max-width: none; /* Cho phép phóng to vượt kích thước container */
+  max-height: none; /* Cho phép phóng to vượt kích thước container */
+  cursor: grab;
+  transform-origin: center center; /* Đảm bảo scale và rotate từ trung tâm */
+}
+
+#uploaded-image-border {
+  position: absolute;
+  /* margin-top: -4px;
+  margin-left: -4px; */
+  border: 26px dashed #fde047; /* Độ dày viền */
+  pointer-events: none;
+  z-index: 15; /* Cao hơn frogger-template */
+  box-sizing: border-box; /* QUAN TRỌNG: Để border nằm trong width/height đã định */
+  transform-origin: center center; /* Đảm bảo scale và rotate từ trung tâm */
+}

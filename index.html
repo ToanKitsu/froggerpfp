@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FroggerPFP - Create Your Avatar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png" />
+    <!-- Khối <style> đã được xóa khỏi đây -->
+  </head>
+  <body
+    class="bg-gray-800 text-white flex flex-col items-center min-h-screen p-4"
+  >
+    <header class="w-full max-w-4xl mb-8">
+      <div class="flex justify-between items-center py-4">
+        <h1 class="text-4xl font-bold text-green-400">FroggerPFP</h1>
+        <div class="flex space-x-4">
+          <a
+            href="https://t.me/FroggerethCTO"
+            target="_blank"
+            class="hover:opacity-75"
+          >
+            <img
+              src="/assets/telegram-icon.svg"
+              alt="Telegram"
+              class="w-8 h-8"
+            />
+          </a>
+          <a
+            href="https://x.com/froggeroneth"
+            target="_blank"
+            class="hover:opacity-75"
+          >
+            <img src="/assets/twitter-icon.svg" alt="Twitter" class="w-8 h-8" />
+          </a>
+          <button
+            id="buy-frogger-button"
+            class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 rounded"
+          >
+            BUY FROGGER
+          </button>
+        </div>
+      </div>
+      <div class="bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+        <span class="text-sm md:text-base"
+          >FROGGER ( ETH ):
+          <span id="contract-address"
+            >0xe778FD9a8d074e4a808092896B33FE3D3452c125</span
+          ></span
+        >
+        <button
+          id="copy-contract-button"
+          title="Copy Contract Address"
+          class="ml-2 p-2 bg-gray-600 hover:bg-gray-500 rounded"
+        >
+          <img src="/assets/copy-icon.svg" alt="Copy" class="w-5 h-5" />
+        </button>
+      </div>
+    </header>
+
+    <main class="w-full max-w-4xl flex flex-col lg:flex-row gap-8">
+      <div class="flex-1 flex flex-col items-center">
+        <h2 class="text-2xl font-semibold mb-4 text-green-300">
+          Create Your Frogger Avatar
+        </h2>
+        <p class="text-gray-400 mb-6 text-center">
+          Upload your photo, adjust size and position to create your
+          personalized avatar.
+        </p>
+
+        <div class="pfp-container bg-gray-700">
+          <div id="uploaded-image-container">
+            <img
+              id="uploaded-image"
+              src="#"
+              alt="Uploaded image"
+              class="hidden"
+            />
+          </div>
+          <img
+            id="frogger-template"
+            src="assets/frogger_template.png"
+            alt="Frogger Template"
+          />
+          <div id="uploaded-image-border" class="hidden">
+            <span class="corner-dot top-left"></span>
+            <span class="corner-dot top-right"></span>
+            <span class="corner-dot bottom-left"></span>
+            <span class="corner-dot bottom-right"></span>
+          </div>
+        </div>
+        <div class="mt-6 w-full max-w-xs">
+          <label
+            for="image-upload"
+            class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg cursor-pointer flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+              />
+            </svg>
+            Select Photo
+          </label>
+          <input
+            type="file"
+            id="image-upload"
+            class="hidden"
+            accept="image/*"
+          />
+        </div>
+      </div>
+
+      <aside class="w-full lg:w-1/3 bg-gray-700 p-6 rounded-lg">
+        <h3 class="text-xl font-semibold mb-4 text-green-300">Photo Editor</h3>
+
+        <div class="mb-4">
+          <label
+            for="scale-slider"
+            class="block mb-2 text-sm font-medium text-gray-300"
+            >Scale:</label
+          >
+          <input
+            id="scale-slider"
+            type="range"
+            min="0.1"
+            max="3"
+            value="1"
+            step="0.01"
+            class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <label for="rotate-slider" class="text-sm font-medium text-gray-300"
+              >Rotate:</label
+            >
+            <span id="rotation-display" class="text-sm text-gray-400">0°</span>
+          </div>
+          <input
+            id="rotate-slider"
+            type="range"
+            min="-720"
+            max="720"
+            value="0"
+            step="1"
+            class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+
+        <button
+          id="download-button"
+          class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-3 px-4 rounded-lg flex items-center justify-center disabled:opacity-50"
+          disabled
+        >
+          <img
+            class="w-6 h-6"
+            id="download-icon"
+            src="/assets/download.svg"
+            alt="Frogger Download"
+          />
+          <span class="ml-4"> Download Avatar </span>
+        </button>
+
+        <div class="mt-8 border-t border-gray-600 pt-6">
+          <h4
+            class="text-lg font-semibold mb-3 text-green-300 flex items-center cursor-pointer"
+            id="tips-toggle"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2 transition-transform transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+            Tips & Tricks
+          </h4>
+          <div id="tips-content" class="text-sm text-gray-400 hidden space-y-2">
+            <p>- Use high-resolution images for the best results.</p>
+            <p>- Adjust the scale and rotation until you are satisfied.</p>
+            <p>
+              - Your image is processed locally in your browser - nothing is
+              uploaded to our servers.
+            </p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer
+      class="w-full max-w-4xl mt-12 text-center text-gray-500 text-sm py-4 border-t border-gray-700"
+    >
+      <p>© <span id="current-year"></span> FroggerPFP. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
